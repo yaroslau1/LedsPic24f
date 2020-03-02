@@ -37,6 +37,8 @@
       <itemPath>main.c</itemPath>
       <itemPath>work.c</itemPath>
       <itemPath>work.h</itemPath>
+      <itemPath>i2c.c</itemPath>
+      <itemPath>i2c.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

@@ -59,6 +59,7 @@
 #include "mcc_generated_files/system.h"
 #include "mcc_generated_files/i2c2.h"
 #include "xc.h"
+#include "i2c.h"
 
 #define FOSC    (8000000ULL)
 #define FCY     (FOSC/2)
@@ -81,7 +82,7 @@
 #define SSD1308_Dectivate_Scroll_Cmd	0x2E
 #define SSD1308_Set_Brightness_Cmd      0x81
 
-I2C2_MESSAGE_STATUS status = I2C2_MESSAGE_PENDING;
+I2C2_MESSAGE_STATUS status = I2C2_STUCK_START;
 
 
 const uint8_t OledFont[][8] =
@@ -423,13 +424,28 @@ void oledInit()
 
 void ssd_command(int cmd)
 {
-    uint8_t command_buffer[] = {0x00,0x00};
-        
-    command_buffer[0] = 0x00; //control byte
-    command_buffer[1] = cmd;
+//    uint8_t command_buffer[] = {0x00,0x00};
+//        
+//    command_buffer[0] = 0x00; //control byte
+//    command_buffer[1] = cmd;
+//    
+////    I2C2CONbits.SEN = 1;        //Generate Start Condition
+////    while (I2C2CONbits.SEN);
+//    I2C2_MasterWrite( command_buffer ,2 ,0x3C, &status);
+////    I2C2CONbits.PEN = 1;        //Generate Stop Condition
+////    while (I2C2CONbits.PEN);
     
+    uint8_t AddrW = 0x78;
     
-    I2C2_MasterWrite( command_buffer ,2 ,0x3C, &status);
+    I2C2CONbits.I2CEN = 1;
+    I2C2CONbits.SEN = 1;
+    while (I2C2CONbits.SEN != 0);
+    I2C2TRN = AddrW;
+    while (I2C2STATbits.TRSTAT == 1);
+    I2C2TRN = cmd;
+    while (I2C2STATbits.TRSTAT == 1);
+    I2C2CONbits.PEN = 1;
+    I2C2CONbits.I2CEN = 0;
    
 }
 
@@ -466,23 +482,57 @@ int main(void)
         ssd_command(0xA5);
         ssd_command(0xA7);
         ssd_command(SSD1308_Set_Brightness_Cmd);
-        
+     uint16_t adress = 0x3C << 1;
+        //LDByteWriteI2C(0x3C, adress, 0xA5);
+        //ssd_command(0xAF);
+        //LDByteWriteI2C(0x3C, 0x78, 0xA6);
+//        
         ssd_command( 0xB0 + 5);
         ssd_command( 0x00 + (8*5 & 0x0F) );
         ssd_command( 0x10 + ((8*5>>4)&0x0F) );
+     
+     uint8_t AddrW = 0x78;
+     uint8_t ByteW = 0x1;
+     
+    
+//   I2C2CONbits.I2CEN = 1;
+//   I2C2BRG = 0x27;
+//   I2C2CONbits.SEN = 1;
+//   while (I2C2CONbits.SEN != 0);
+//   I2C2TRN = AddrW;
+//   while (I2C2STATbits.TRSTAT == 1);
+//   I2C2TRN = ByteW;
+//   while (I2C2STATbits.TRSTAT == 1);
+//   I2C2CONbits.PEN = 1;
+//   I2C2CONbits.I2CEN = 0;
+   //ByteW = ByteW << 1; 
+     
+     
 
     uint16_t count = 0;
     while (1)
     {
-        I2C2_Initialize();
-        I2C2_
-         ssd_command(0xAF);
-         ssd_command(0x09);
-         ssd_command(0x09);
-         ssd_command(0x09);
+//        I2C2_Initialize();
+//        //I2C2_
+//         ssd_command(0xAF);
+//         ssd_command(0x09);
+//         ssd_command(0x09);
+//         ssd_command(0x09);
+        //LDByteWriteI2C(0x3C, adress, 0xAF); 
 //        
+        
+//        I2C2CONbits.I2CEN = 1;
+//   I2C2CONbits.SEN = 1;
+//   while (I2C2CONbits.SEN != 0);
+//   I2C2TRN = AddrW;
+//   while (I2C2STATbits.TRSTAT == 1);
+//   I2C2TRN = ByteW;
+//   while (I2C2STATbits.TRSTAT == 1);
+//   I2C2CONbits.PEN = 1;
+//   I2C2CONbits.I2CEN = 0;
+//   ByteW ++;
          
-         for(i = 0; i < 100; i++){
+         for(i = 0; i < 100000; i++){
              
          }
         
