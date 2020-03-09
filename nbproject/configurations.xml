@@ -39,6 +39,10 @@
       <itemPath>work.h</itemPath>
       <itemPath>i2c.c</itemPath>
       <itemPath>i2c.h</itemPath>
+      <itemPath>ssd_1306.c</itemPath>
+      <itemPath>ssd_1306.h</itemPath>
+      <itemPath>adc.c</itemPath>
+      <itemPath>adc.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -47,6 +51,9 @@
       <itemPath>MyConfig.mc3</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
@@ -206,6 +213,7 @@
         <property key="legacy-libc" value="true"/>
         <property key="mpreserve-all" value="false"/>
         <property key="oXC16glb-macros" value=""/>
+        <property key="omit-pack-options" value="1"/>
         <property key="output-file-format" value="elf"/>
         <property key="preserve-all" value="false"/>
         <property key="preserve-file" value=""/>
@@ -269,6 +277,7 @@
         <property key="UART 4" value="true"/>
         <property key="UCNFG1" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

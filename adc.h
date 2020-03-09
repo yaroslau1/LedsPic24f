@@ -76,9 +76,10 @@ extern "C" {
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
-void i2cBeginTransaction(uint8_t deviceAdr);
-void i2cEndTransaction();
-void i2cWrite(uint8_t cmd);
-void i2cWriteTest(uint8_t cmd);
 
+extern uint16_t chanel_21;
+extern uint16_t chanel_23;
+
+void ADC_Init();
+void ADC_getDataFromChanel();
 

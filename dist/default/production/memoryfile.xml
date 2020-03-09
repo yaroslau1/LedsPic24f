@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-  <executable name="dist/default/production/LCDs.X.production.elf">
+  <executable name="dist/default/production/LEDs.production.elf">
     <memory name="data">
       <units>bytes</units>
       <length>8192</length>
-      <used>78</used>
-      <free>8114</free>
+      <used>84</used>
+      <free>8108</free>
     </memory>
     <memory name="program">
       <units>bytes</units>
       <length>131316</length>
-      <used>6471</used>
-      <free>124845</free>
+      <used>11508</used>
+      <free>119808</free>
     </memory>
   </executable>
 </project>

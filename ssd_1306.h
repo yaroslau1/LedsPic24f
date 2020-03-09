@@ -76,9 +76,27 @@ extern "C" {
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
-void i2cBeginTransaction(uint8_t deviceAdr);
-void i2cEndTransaction();
-void i2cWrite(uint8_t cmd);
-void i2cWriteTest(uint8_t cmd);
+extern const unsigned char one [];
 
+
+void ssdInit();
+void ssdCommand(uint8_t cmd);
+void oledCommand(uint8_t cmd);
+void ssdData(uint8_t cmd);
+void ssdClear();
+void ssdClearPage(uint8_t page);
+void verticalScrollEnabled();
+void ssdOne(uint8_t x, uint8_t y);
+void ssdTwo(uint8_t x, uint8_t y);
+void ssdThree(uint8_t x, uint8_t y);
+void ssdFour(uint8_t x, uint8_t y);
+void ssdFive(uint8_t x, uint8_t y);
+void ssdSix(uint8_t x, uint8_t y);
+void ssdSeven(uint8_t x, uint8_t y);
+void ssdEight(uint8_t x, uint8_t y);
+void ssdNine(uint8_t x, uint8_t y);
+void ssdZero(uint8_t x, uint8_t y);
+void ssdAll();
+void setCursorOffset(uint8_t x, uint8_t offsetX, uint8_t y,  uint8_t offsetY);
+void setCursor(uint8_t x, uint8_t y);
 

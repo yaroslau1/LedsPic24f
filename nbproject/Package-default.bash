@@ -10,9 +10,9 @@ CND_CONF=default
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/LCDs.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-OUTPUT_BASENAME=LCDs.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-PACKAGE_TOP_DIR=lcds.x/
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/LEDs.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=LEDs.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+PACKAGE_TOP_DIR=leds/
 
 # Functions
 function checkReturnCode
@@ -57,15 +57,15 @@ mkdir -p ${TMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory ${TMPDIR}/lcds.x/bin
+makeDirectory ${TMPDIR}/leds/bin
 copyFileToTmpDir "${OUTPUT_PATH}" "${TMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/package/lcds.x.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/package/leds.tar
 cd ${TMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/lcds.x.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/leds.tar *
 checkReturnCode
 
 # Cleanup

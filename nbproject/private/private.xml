@@ -3,13 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/User/MPLABXProjects/LCDs.X/mcc_generated_files/i2c2.h</file>
-            <file>file:/C:/Users/User/MPLABXProjects/LCDs.X/work.h</file>
-            <file>file:/C:/Users/User/MPLABXProjects/LCDs.X/work.c</file>
-            <file>file:/C:/Users/User/MPLABXProjects/LCDs.X/mcc_generated_files/pin_manager.c</file>
-            <file>file:/C:/Users/User/MPLABXProjects/LCDs.X/mcc_generated_files/system.c</file>
-            <file>file:/C:/Users/User/MPLABXProjects/LCDs.X/main.c</file>
-            <file>file:/C:/Users/User/MPLABXProjects/LCDs.X/mcc_generated_files/i2c2.c</file>
+            <file>file:/C:/Users/User/MPLABXProjects/LEDs/ssd_1306.c</file>
+            <file>file:/C:/Users/User/MPLABXProjects/LEDs/main.c</file>
+            <file>file:/C:/Users/User/MPLABXProjects/LEDs/i2c.c</file>
+            <file>file:/C:/Users/User/MPLABXProjects/LEDs/ssd_1306.h</file>
+            <file>file:/C:/Users/User/MPLABXProjects/LEDs/i2c.h</file>
         </group>
     </open-files>
 </project-private>
