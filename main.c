@@ -61,6 +61,8 @@
 #include "xc.h"
 #include "i2c.h"
 #include "ssd_1306.h"
+#include "adc.h"
+#include "work.h"
 
 #define FOSC    (8000000ULL)
 #define FCY     (FOSC/2)
@@ -367,6 +369,7 @@ int main(void)
 {
     // initialize the device
     SYSTEM_Initialize();
+    ADC_Init();
     
     uint32_t i;
     for(i = 0; i < 10000; i++);
@@ -394,12 +397,17 @@ int main(void)
     }
     for(i = 0; i < 20000; i++);
     
-    ssdOne(3, 2);
-    ssdTwo(23, 2);
-    ssdThree(46, 2);
-    ssdFour(69, 2);
-    ssdZero(92, 2);
-    ssdAll();
+//    ssdOne(0, 2);
+//    ssdTwo(25, 2);
+//    ssdSix(50, 2);
+//    ssdFour(75, 2);
+//    ssdZero(100, 2);
+    //ssdNumber(1, 25, 2);
+   //ssdAll(0);
+//    
+//    ssdPrintDigit(7, 105, 2);
+    
+   // printNumber(4445);
     
    
 //    uint8_t j;
@@ -417,7 +425,10 @@ int main(void)
     uint16_t count = 0;
     while (1)
     {
-        
+        for(i = 0; i < 20000; i++);
+        ADC_getDataFromChanel();
+        //ssdClear();
+        printNumber(chanel_23);
     }
 
     return 1;

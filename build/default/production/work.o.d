@@ -1,2 +1,3 @@
 build/default/production/work.o:  \
-work.c 
+work.c  \
+ssd_1306.h 

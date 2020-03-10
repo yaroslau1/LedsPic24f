@@ -5,7 +5,9 @@
         <group>
             <file>file:/C:/Users/User/MPLABXProjects/LEDs/ssd_1306.c</file>
             <file>file:/C:/Users/User/MPLABXProjects/LEDs/main.c</file>
+            <file>file:/C:/Users/User/MPLABXProjects/LEDs/work.c</file>
             <file>file:/C:/Users/User/MPLABXProjects/LEDs/i2c.c</file>
+            <file>file:/C:/Users/User/MPLABXProjects/LEDs/adc.c</file>
             <file>file:/C:/Users/User/MPLABXProjects/LEDs/ssd_1306.h</file>
             <file>file:/C:/Users/User/MPLABXProjects/LEDs/i2c.h</file>
         </group>

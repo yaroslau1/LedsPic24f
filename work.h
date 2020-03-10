@@ -76,3 +76,5 @@ extern "C" {
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
+void printNumber (uint16_t digit);
+
