@@ -76,9 +76,9 @@ extern "C" {
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
-
-#define SH1106
-//#define SSD1306
-
-void printNumber (uint16_t digit);
-
+void sh1106_Init();
+void sh1106_Command(uint8_t cmd);
+void sh1106_Data(uint8_t cmd);
+void sh1106_Clear();
+void sh1106_SetCursor(uint8_t x, uint8_t y);
+void sh1106_PrintDigit(uint16_t digit, uint8_t x, uint8_t y);

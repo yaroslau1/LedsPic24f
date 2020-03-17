@@ -77,6 +77,8 @@ extern "C" {
 #endif	/* XC_HEADER_TEMPLATE_H */
 
 extern const unsigned char one [];
+extern const unsigned char all [];
+extern const unsigned char numbers [10][76];
 
 
 void ssdInit();

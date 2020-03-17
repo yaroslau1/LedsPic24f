@@ -72,12 +72,12 @@ void PIN_MANAGER_Initialize (void)
     /****************************************************************************
      * Setting the GPIO Direction SFR(s)
      ***************************************************************************/
-    TRISA = 0xC6FF;
+    TRISA = 0xC6FB;
     TRISB = 0xF0FF;
     TRISC = 0x701E;
-    TRISD = 0xFFFF;
-    TRISE = 0x03FF;
-    TRISF = 0x31B3;
+    TRISD = 0x7FFF;
+    TRISE = 0x03FD;
+    TRISF = 0x30B7;
     TRISG = 0xF3CF;
 
     /****************************************************************************
@@ -120,5 +120,15 @@ void PIN_MANAGER_Initialize (void)
     
     //Setting UTRDIS bit to use RG2 and RG3 as GPIO 
     U1CNFG2bits.UTRDIS = 1;
+    
+    /****************************************************************************
+     * Set the PPS
+     ***************************************************************************/
+    __builtin_write_OSCCONL(OSCCON & 0xbf); // unlock PPS
+
+    RPOR2bits.RP5R = 0x0007;    //RD15->SPI1:SDO1
+    RPOR8bits.RP16R = 0x0008;    //RF3->SPI1:SCK1OUT
+
+    __builtin_write_OSCCONL(OSCCON | 0x40); // lock PPS
 }
 

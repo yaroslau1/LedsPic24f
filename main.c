@@ -63,6 +63,7 @@
 #include "ssd_1306.h"
 #include "adc.h"
 #include "work.h"
+#include "sh1106.h"
 
 #define FOSC    (8000000ULL)
 #define FCY     (FOSC/2)
@@ -70,20 +71,6 @@
 #define I2C2_SDA_TRIS	TRISFbits.TRISF4
 #define I2C2_SCL_LAT	LATFbits.LATF5
 #define I2C2_SDA_LAT	LATFbits.LATF4
-
-#define kI2C_100KHZ     (0x00)
-#define kI2C_400KHZ     (0x02)
-
-#define SSD1308_Address                 0x3C/2
-#define SSD1308_Command_Mode		0x80
-#define SSD1308_Data_Mode               0x40
-#define SSD1308_Display_Off_Cmd         0xAE
-#define SSD1308_Display_On_Cmd          0xAF
-#define SSD1308_Normal_Display_Cmd      0xA6
-#define SSD1308_Inverse_Display_Cmd	0xA7
-#define SSD1308_Activate_Scroll_Cmd	0x2F
-#define SSD1308_Dectivate_Scroll_Cmd	0x2E
-#define SSD1308_Set_Brightness_Cmd      0x81
 
 I2C2_MESSAGE_STATUS status = I2C2_STUCK_START;
 
@@ -347,33 +334,15 @@ const unsigned char delfidia [] = {
                          Main application
  */
 
-
-void ssd_command(int cmd)
-{    
-    uint8_t AddrW = 0x78;
-    
-    I2C2CONbits.I2CEN = 1;
-    I2C2CONbits.SEN = 1;
-    while (I2C2CONbits.SEN != 0);
-    I2C2TRN = AddrW;
-    while (I2C2STATbits.TRSTAT == 1);
-    I2C2TRN = cmd;
-    while (I2C2STATbits.TRSTAT == 1);
-    I2C2CONbits.PEN = 1;
-    I2C2CONbits.I2CEN = 0;
-   
-}
-
-
 int main(void)
 {
     // initialize the device
     SYSTEM_Initialize();
-    ADC_Init();
-    
+    ADC_Init();    
     uint32_t i;
-    for(i = 0; i < 10000; i++);
+    for(i = 0; i < 100000; i++);
      
+#ifdef SSD1306
     ssdInit();
      
     for(i = 0; i < 20000; i++);
@@ -395,39 +364,31 @@ int main(void)
     for (b = 0; b < 1024; b++){ 
         ssdData(0x00);
     }
+    
+    ssdAll(0);
+#endif
+    
+#ifdef SH1106
+    sh1106_Init();
     for(i = 0; i < 20000; i++);
-    
-//    ssdOne(0, 2);
-//    ssdTwo(25, 2);
-//    ssdSix(50, 2);
-//    ssdFour(75, 2);
-//    ssdZero(100, 2);
-    //ssdNumber(1, 25, 2);
-   //ssdAll(0);
-//    
-//    ssdPrintDigit(7, 105, 2);
-    
-   // printNumber(4445);
-    
    
-//    uint8_t j;
-//    for(i = 0; i< 94; i++){
-//        for(j = 0; j < 8; j++){
-//            ssdData(OledFont[i][j]);
-//        }
-//    }
-
     
-    //verticalScrollEnabled();
- 
-     
-
-    uint16_t count = 0;
+    sh1106_Clear();
+    
+    //for(i = 0; i < 20000; i++);
+    
+    sh1106_PrintLogo(delfidia);
+    for(i = 0; i < 400000; i++);
+    sh1106_Clear();
+    
+    sh1106_PrintAll();
+    
+#endif
+    
     while (1)
     {
         for(i = 0; i < 20000; i++);
         ADC_getDataFromChanel();
-        //ssdClear();
         printNumber(chanel_23);
     }
 

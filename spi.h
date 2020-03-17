@@ -76,9 +76,12 @@ extern "C" {
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
+extern uint8_t dataSpi[1040];
+extern uint8_t lastByte;
+extern uint8_t prevByte;
 
-#define SH1106
-//#define SSD1306
 
-void printNumber (uint16_t digit);
-
+void spiInit();
+void spiStart();
+void spiTransmit(uint8_t *command, uint16_t size);
+void clearData();
