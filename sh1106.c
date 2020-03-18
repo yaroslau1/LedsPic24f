@@ -170,12 +170,4 @@ void sh1106_PrintTest(uint16_t digit, uint8_t x, uint8_t y){
             arrayCounter++;
         }
     } 
-    
-    uint8_t xHigh = x >> 4;
-    x &= ~(1<<7);
-    x &= ~(1<<6);
-    x &= ~(1<<5);
-    x &= ~(1<<4);
-    uint8_t xLow = x;
-    printNumber(xLow);
 }

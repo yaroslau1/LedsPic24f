@@ -84,4 +84,5 @@ extern uint8_t prevByte;
 void spiInit();
 void spiStart();
 void spiTransmit(uint8_t *command, uint16_t size);
+void spiTransmitOne(uint8_t command);
 void clearData();

@@ -67,6 +67,18 @@ void spiTransmit(uint8_t *command, uint16_t size){
     
 }
 
+void spiTransmitOne(uint8_t command){
+    while( SPI1STATbits.SPITBF == 1 )
+    {
+
+    }
+
+    SPI1BUF = command;
+
+    while ( SPI1STATbits.SRXMPT == 1);
+    
+}
+
 void clearData(){
     uint8_t count;
     for(count = 0; count < 50; count++){

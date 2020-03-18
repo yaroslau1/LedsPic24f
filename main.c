@@ -64,6 +64,8 @@
 #include "adc.h"
 #include "work.h"
 #include "sh1106.h"
+#include "st7789.h"
+#include "mcc_generated_files/pin_manager.h"
 
 #define FOSC    (8000000ULL)
 #define FCY     (FOSC/2)
@@ -338,8 +340,10 @@ int main(void)
 {
     // initialize the device
     SYSTEM_Initialize();
-    ADC_Init();    
+    ADC_Init(); 
+    //spiInit();
     uint32_t i;
+    IO_LED_SetLow();
     for(i = 0; i < 100000; i++);
      
 #ifdef SSD1306
@@ -385,11 +389,19 @@ int main(void)
     
 #endif
     
+#ifdef ST7789
+//    IO_LED_SetHigh();
+    st7789_Init();
+    drawHLine(0,100, 10, ST7789_BLUE);
+#endif
+    
     while (1)
     {
-        for(i = 0; i < 20000; i++);
-        ADC_getDataFromChanel();
-        printNumber(chanel_23);
+//        for(i = 0; i < 20000; i++);
+//        ADC_getDataFromChanel();
+//        printNumber(chanel_23);
+        IO_LED_Toggle();
+        wait(20000);
     }
 
     return 1;

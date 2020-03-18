@@ -77,3 +77,10 @@ void printNumber (uint16_t digit){
         
     }
 }
+
+void wait(uint32_t time){
+    uint32_t waitingTime;
+    for(waitingTime = 0; waitingTime < time; waitingTime++){
+        Nop();
+    }
+}
