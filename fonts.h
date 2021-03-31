@@ -77,11 +77,21 @@ extern "C" {
 #endif	/* XC_HEADER_TEMPLATE_H */
 
 
-//#define SH1106
-//#define SSD1306
-#define ST7789
 
-void printNumber (uint16_t digit);
-void wait1(uint32_t time);
-int isButtonPressed();
-
+extern const unsigned char all [];
+extern const unsigned char numbers [10][76];
+extern const unsigned char numbersSmall [][15];
+extern const unsigned char strip [];
+extern const unsigned char stripWithoutBlood [];
+extern const unsigned char stripHorizont [];
+extern const unsigned char stripHorizontWithoutBlood [];
+extern const unsigned char before [];
+extern const unsigned char after [];
+extern const unsigned char colon_s [];
+extern const unsigned char dot_s [];
+extern const unsigned char mainResult [];
+extern const unsigned char mainResultNegative [];
+extern const unsigned char temDateTime [];
+extern const unsigned char err11 [];
+extern const unsigned char mainResult_v7 [];
+extern const unsigned char bigDisplay [];

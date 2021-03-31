@@ -1,88 +1,41 @@
-/* Microchip Technology Inc. and its subsidiaries.  You may use this software 
- * and any derivatives exclusively with Microchip products. 
- * 
- * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER 
- * EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED 
- * WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A 
- * PARTICULAR PURPOSE, OR ITS INTERACTION WITH MICROCHIP PRODUCTS, COMBINATION 
- * WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
- *
- * IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
- * INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND 
- * WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS 
- * BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE 
- * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS 
- * IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF 
- * ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
- *
- * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
- * TERMS. 
- */
-
-/* 
- * File:   
- * Author: 
- * Comments:
- * Revision history: 
- */
-
-// This is a guard condition so that contents of this file are not included
-// more than once.  
 #ifndef XC_HEADER_TEMPLATE_H
 #define	XC_HEADER_TEMPLATE_H
 
-#include <xc.h> // include processor files - each processor file is guarded.  
+#include <xc.h>
 
-// TODO Insert appropriate #include <>
+#include "p24FJ128GC010.h" // include processor files - each processor file is guarded.  
 
-// TODO Insert C++ class definitions if appropriate
+#define     ANS_FLASH1_RESET    ANSDbits.ANSD1        //RESET pin 76
+#define     ANS_FLASH1_CLK      ANSDbits.ANSD2        //CLK pin 77
+#define     ANS_FLASH1_SDO      ANSDbits.ANSD3        //SDO pin 78
+#define     ANS_FLASH1_WP       ANSDbits.ANSD13       //WP pin 80
+#define     ANS_FLASH1_SDI      ANSDbits.ANSD4        //SDI pin 81
+#define     ANS_FLASH1_CS       ANSDbits.ANSD5        //CS pin 82
 
-// TODO Insert declarations
+#define     PIN_FLASH1_RESET    TRISDbits.TRISD1      //RESET pin 76
+#define     PIN_FLASH1_CLK      TRISDbits.TRISD2      //CLK pin 77
+#define     PIN_FLASH1_SDO      TRISDbits.TRISD3      //SDO pin 78
+#define     PIN_FLASH1_WP       TRISDbits.TRISD13     //WP pin 80
+#define     PIN_FLASH1_SDI      TRISDbits.TRISD4      //SDI pin 81
+#define     PIN_FLASH1_CS       TRISDbits.TRISD5      //CS pin 82
 
-// Comment a function and leverage automatic documentation with slash star star
-/**
-    <p><b>Function prototype:</b></p>
-  
-    <p><b>Summary:</b></p>
+#define     FLASH1_RESET        PORTDbits.RD1         //RESET pin 76
+#define     FLASH1_CLK          PORTDbits.RD2         //CLK pin 77
+#define     FLASH1_SDO          PORTDbits.RD3         //SDO pin 78
+#define     FLASH1_WP           PORTDbits.RD13        //WP pin 80
+#define     FLASH1_SDI          PORTDbits.RD4         //SDI pin 81
+#define     FLASH1_CS           PORTDbits.RD5         //CS pin 82
 
-    <p><b>Description:</b></p>
+#define     TFT_BUFFER_FLASH    256
 
-    <p><b>Precondition:</b></p>
-
-    <p><b>Parameters:</b></p>
-
-    <p><b>Returns:</b></p>
-
-    <p><b>Example:</b></p>
-    <code>
- 
-    </code>
-
-    <p><b>Remarks:</b></p>
- */
-// TODO Insert declarations or function prototypes (right here) to leverage 
-// live documentation
-
-#ifdef	__cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-    // TODO If C++ is being used, regular C code needs function names to have C 
-    // linkage so the functions can be used by the c code. 
-
-#ifdef	__cplusplus
-}
-#endif /* __cplusplus */
-
-#endif	/* XC_HEADER_TEMPLATE_H */
-
-extern uint8_t dataSpi[1040];
+extern unsigned char dataSpi[TFT_BUFFER_FLASH];
 extern uint8_t lastByte;
 extern uint8_t prevByte;
 
-
 void spiInit();
 void spiStart();
-void spiTransmit(uint8_t *command, uint16_t size);
-void spiTransmitOne(uint8_t command);
+void spiTransmit(uint8_t *command, uint16_t size, uint8_t status);
+
 void clearData();
+
+#endif	/* XC_HEADER_TEMPLATE_H */

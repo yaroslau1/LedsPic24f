@@ -13,6 +13,7 @@
 
 
 uint16_t chanel_21;
+uint16_t chanel_15;
 uint16_t chanel_23;
 
 void ADC_Init(){
@@ -95,6 +96,7 @@ void ADC_Init(){
     ADTBL3 = 3;
     ADTBL4 = 8;
     ADTBL5 = 9;
+    ADTBL6 = 15;
  
     ADCON1bits.ADON = 1;               //Enable ADC 12-bit module   
     while (ADSTATHbits.ADREADY == 0);  //Wait for ready ADC
@@ -114,4 +116,5 @@ void ADC_getDataFromChanel(){
     ADL0CONLbits.SAMP = 1;             //Begin conversion
     chanel_21 = ADRES1;
     chanel_23 = ADRES2;
+    chanel_15 = ADRES6;
 }

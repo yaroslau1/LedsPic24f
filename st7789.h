@@ -57,6 +57,8 @@ void st7789_Clear();
 void st7789_BacklightON();
 void st7789_BacklightOFF();
 void st7789_Reset();
+void st7789_start();
+void st7789_end();
 
 void displayInit(const uint8_t *addr);
 void fillScreen(uint16_t color);

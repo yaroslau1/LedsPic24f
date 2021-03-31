@@ -76,9 +76,9 @@ extern "C" {
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
-void i2cBeginTransaction(uint8_t deviceAdr);
-void i2cEndTransaction();
-void i2cWrite(uint8_t cmd);
-void i2cWriteTest(uint8_t cmd);
+//void i2cBeginTransaction(uint8_t deviceAdr);
+//void i2cEndTransaction();
+//void i2cWrite(uint8_t cmd);
+//void i2cWriteTest(uint8_t cmd);
 
 

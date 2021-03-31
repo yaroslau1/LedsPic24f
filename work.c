@@ -10,6 +10,7 @@
 #include "ssd_1306.h"
 #include "sh1106.h"
 #include "work.h"
+#include "mcc_generated_files/pin_manager.h"
 
 void printNumber (uint16_t digit){
     if(digit < 10){
@@ -78,9 +79,21 @@ void printNumber (uint16_t digit){
     }
 }
 
-void wait(uint32_t time){
+void wait1(uint32_t time){
     uint32_t waitingTime;
     for(waitingTime = 0; waitingTime < time; waitingTime++){
         Nop();
     }
+}
+
+
+int isButtonPressed(){
+    int buttonState = 0;
+    if(Button_GetValue()){
+        while(Button_GetValue()){
+                
+        }
+        buttonState = 1;
+    }
+    return buttonState;
 }

@@ -78,6 +78,7 @@ extern "C" {
 
 
 extern uint16_t chanel_21;
+extern uint16_t chanel_15;
 extern uint16_t chanel_23;
 
 void ADC_Init();

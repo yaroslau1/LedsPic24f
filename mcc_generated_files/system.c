@@ -45,19 +45,18 @@
 #include "pin_manager.h"
 #include "clock.h"
 #include "system.h"
-#include "spi1.h"
-#include "i2c2.h"
 #include "interrupt_manager.h"
 #include "traps.h"
-#include "spi1.h"
+#include "oc1.h"
+#include "oc2.h"
 
 void SYSTEM_Initialize(void)
 {
-    PIN_MANAGER_Initialize();
+//    PIN_MANAGER_Initialize();
     CLOCK_Initialize();
-    INTERRUPT_Initialize();
-    SPI1_Initialize();
-    I2C2_Initialize();
+//    INTERRUPT_Initialize();
+    OC1_Initialize();
+    OC2_Initialize();
 }
 
 /**

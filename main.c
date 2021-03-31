@@ -57,15 +57,23 @@
 #include <p24FJ128GC010.h>
 
 #include "mcc_generated_files/system.h"
-#include "mcc_generated_files/i2c2.h"
 #include "xc.h"
-#include "i2c.h"
+//#include "i2c.h"
 #include "ssd_1306.h"
 #include "adc.h"
 #include "work.h"
 #include "sh1106.h"
 #include "st7789.h"
+#include "sensor.h"
 #include "mcc_generated_files/pin_manager.h"
+#include "capacitanceTouch.h"
+#include "spi.h"
+#include "mcc_generated_files/oc1.h"
+#include "mcc_generated_files/clock.h"
+#include "sound.h"
+#include "flash.h"
+#include "delays_and_timers.h"
+#include "global.h"
 
 #define FOSC    (8000000ULL)
 #define FCY     (FOSC/2)
@@ -74,7 +82,14 @@
 #define I2C2_SCL_LAT	LATFbits.LATF5
 #define I2C2_SDA_LAT	LATFbits.LATF4
 
-I2C2_MESSAGE_STATUS status = I2C2_STUCK_START;
+#define    CTMU_MODE_EDGE 0
+#define    RANGE_0_550uA 1    // .550uA
+#define    CTMU_TOUCH_THRESHHOLD_OFFSET 200
+
+//#define LED_B15 PORTBbits.RB15
+
+
+uint16_t chanel_1;
 
 
 const uint8_t OledFont[][8] =
@@ -336,15 +351,195 @@ const unsigned char delfidia [] = {
                          Main application
  */
 
+//// CONFIG4
+//#pragma config DSWDTPS = DSWDTPS1F      // Deep Sleep Watchdog Timer Postscale Select bits (1:68719476736 (25.7 Days))
+//#pragma config DSWDTOSC = SOSC          // DSWDT Reference Clock Select (DSWDT uses SOSC as reference clock)
+//#pragma config DSBOREN = ON             // Deep Sleep BOR Enable bit (DSBOR Enabled)
+//#pragma config DSWDTEN = ON             // Deep Sleep Watchdog Timer Enable (DSWDT Enabled)
+//#pragma config DSSWEN = ON              // DSEN Bit Enable (Deep Sleep is controlled by the register bit DSEN)
+//#pragma config RTCBAT = OFF             // RTC Battery Operation Enable (RTC operation is discontinued in VBAT)
+//#pragma config PLLDIV = NODIV           // PLL Input Prescaler Select bits (Oscillator used directly (4 MHz input))
+//#pragma config I2C2SEL = PRI            // Alternate I2C2 Location Select bit (I2C2 is multiplexed to SDA2/RA3 and SCL2/RA2 )
+//#pragma config IOL1WAY = OFF            // PPS IOLOCK Set Only Once Enable bit (The IOLOCK bit can be set and cleared using the unlock sequence)
+//
+//// CONFIG3
+//#pragma config WPFP = WPFP63            // Write Protection Flash Page Segment Boundary (Page 63 (0xFC00))
+//#pragma config SOSCSEL = ON             // SOSC Selection bits (SOSC circuit selected)
+//#pragma config WDTWIN = PS25_0          // Window Mode Watchdog Timer Window Width Select (Watch Dog Timer Window Width is 25 percent)
+//#pragma config BOREN = OFF              // Brown-out Reset Enable (Brown-out Reset Disabled)
+//#pragma config WPDIS = WPEN             // Segment Write Protection Disable (Enabled)
+//#pragma config WPCFG = WPCFGEN          // Write Protect Configuration Page Select (Enabled)
+//#pragma config WPEND = WPSTARTMEM       // Segment Write Protection End Page Select (Write Protect from page 0 to WPFP)
+//
+//// CONFIG2
+//#pragma config POSCMD = NONE            // Primary Oscillator Select (Primary Oscillator Disabled)
+//#pragma config WDTCLK = LPRC            // WDT Clock Source Select bits (WDT uses LPRC)
+//#pragma config OSCIOFCN = ON            // OSCO Pin Configuration (OSCO/CLKO/RC15 functions as port I/O (RC15))
+//#pragma config FCKSM = CSECME           // Clock Switching and Fail-Safe Clock Monitor Configuration bits (Clock switching is enabled, Fail-Safe Clock Monitor is enabled)
+//#pragma config FNOSC = FRCDIV           // Initial Oscillator Select (Fast RC Oscillator with Postscaler (FRCDIV))
+//#pragma config ALTADREF = AVREF_RA      // External 12-Bit A/D Reference Location Select bit (AVREF+/AVREF- are mapped to RA9/RA10)
+//#pragma config ALTCVREF = CVREF_RA      // External Comparator Reference Location Select bit (CVREF+/CVREF- are mapped to RA9/RA10)
+//#pragma config WDTCMX = LPRC            // WDT Clock Source Select bits (WDT always uses LPRC as its clock source)
+//#pragma config IESO = OFF               // Internal External Switchover (Disabled)
+//
+//// CONFIG1
+//#pragma config WDTPS = PS8192           // Watchdog Timer Postscaler Select (1:8,192)
+//#pragma config FWPSA = PR32             // WDT Prescaler Ratio Select (1:32)
+//#pragma config WINDIS = OFF             // Windowed WDT Disable (Standard Watchdog Timer)
+//#pragma config FWDTEN = WDT_SW          // Watchdog Timer Enable (WDT controlled with the SWDTEN bit)
+//#pragma config ICS = PGx2               // Emulator Pin Placement Select bits (Emulator functions are shared with PGEC2/PGED2)
+//#pragma config LPCFG = OFF              // Low power regulator control (Disabled - regardless of RETEN)
+//#pragma config GWRP = OFF               // General Segment Write Protect (Disabled)
+//#pragma config GCP = OFF                // General Segment Code Protect (Code protection is disabled)
+//#pragma config JTAGEN = OFF             // JTAG Port Enable (Disabled)
+
 int main(void)
 {
     // initialize the device
-    SYSTEM_Initialize();
-    ADC_Init(); 
+//    SYSTEM_Initialize();
+//    _SWDTEN = 0;
+//    
+//    ANSA = 0x0000, ANSB = 0x0000, ANSC = 0x0000, ANSD = 0x0000, ANSE = 0x0000, ANSF = 0x0000, ANSG = 0x0000;
+//    TRISA = 0xFFFF, TRISB = 0xFFFF, TRISC = 0xFFFF, TRISD = 0xFFFF, TRISE = 0xFFFF, TRISF = 0xFFFF, TRISG = 0xFFFF;
+    CLOCK_Initialize();
+    CLKDIVbits.RCDIV = 0; 
+    ANSA = 0x0000, ANSB = 0x0000, ANSC = 0x0000, ANSD = 0x0000, ANSE = 0x0000, ANSF = 0x0000, ANSG = 0x0000;
+    TRISA = 0xFFFF, TRISB = 0xFFFF, TRISC = 0xFFFF, TRISD = 0xFFFF, TRISE = 0xFFFF, TRISF = 0xFFFF, TRISG = 0xFFFF;
+    
+    ANSBbits.ANSB15 = 1;
+    ANSFbits.ANSF13 = 0;
+    TRISBbits.TRISB15 = 1;
+    TRISFbits.TRISF13 = 1;
+    __builtin_write_OSCCONL(OSCCON & 0xbf); // unlock PPS
+
+    RPOR15bits.RP31R = 0x0012;    //RF13->OC1:OC1
+    RPOR14bits.RP29R = 0x0012;    //RB15->OC1:OC1
+
+    __builtin_write_OSCCONL(OSCCON | 0x40); // lock PPS
+    OC1_Initialize();
+    
+    
+    TMR_Timer1_InitializationDefault();
+    TIMER1_ENABLE = 1;
+    
+    TMR2_SetInterruptHandler(Tmr2_ISR);
+    
+//    IO_GLed_SetDigitalOutput();
+//    IO_TBut_SetDigitalInput();
+//    IO_TControl_SetDigitalOutput();
+//    ADC_Init(); 
+    //sensorInit();
+//    unsigned   int     untouched, sample;
+//    CtmuCapTouchConfig(CTMU_MODE_EDGE, RANGE_0_550uA, 0);
+//    untouched = CtmuReturnSample();       // get reference value
     //spiInit();
-    uint32_t i;
-    IO_LED_SetLow();
-    for(i = 0; i < 100000; i++);
+//    uint32_t i;
+//    uint32_t counterCalibrate = 0;
+//    uint32_t counter = 0;
+//    IO_LED_SetLow();
+//    ANSBbits.ANSB0 = 0;
+//    TRISBbits.TRISB0 = 0;
+//    PORTBbits.RB0 = 1;
+    SOUND_Init();
+//    ANSEbits.ANSE6 = 0;
+//    TRISEbits.TRISE6 = 0;
+//    PORTEbits.RE6 = 1;
+    OC1_Start();
+//    OC1_SingleCompareValueSet(20000);
+    OC1_PrimaryValueSet(100);
+    OC1_SecondaryValueSet(511);
+    SOUND_setVolume(10);
+    ANSEbits.ANSE4 = 0;
+    TRISEbits.TRISE4 = 0;
+    while(1){
+//        flashReadId();
+        PORTEbits.RE4 = 1;
+//        wait();
+//        flashReadId();
+        SOUND_playFragment(0, 1234);
+        PORTEbits.RE4 = 0;
+//        wait();
+    }
+//    for(i = 0; i < 100000; i++);
+    
+    
+//    CTMUCON1bits.TGEN = 0;
+//    ANSBbits.ANSB15 = 1;
+//    TRISBbits.TRISB15 = 1;
+    
+//    ADCON1bits.ADON = 0;
+//    ADCON1bits.ADSIDL = 1;
+//    ADCON1bits.ADSLP = 1;
+//    ADCON1bits.FORM = 0b0100;
+//    ADCON1bits.PUMPEN = 0;    
+//    ADCON1bits.ADCAL = 0;
+//    ADCON1bits.PWRLVL = 0;
+//
+//    ADCON2bits.PVCFG = 0b00;
+//    ADCON2bits.NVCFG = 0;
+//    ADCON2bits.BUFORG = 1;
+//    ADCON2bits.RFPUMP = 0;
+//    
+//    ADCON3bits.ADRC = 1;
+//    ADCON3bits.SLEN3 = 0;
+//    ADCON3bits.SLEN2 = 0;
+//    ADCON3bits.SLEN1 = 0;
+//    ADCON3bits.SLEN0 = 1;
+//    ADCON3bits.ADCS = 0b00000100;
+//    
+//    ADCON1bits.ADON = 1;    
+//    while (ADSTATHbits.ADREADY == 0);
+//    
+//    ADL0CONHbits.ASEN = 0;    
+//    ADL0CONHbits.SLINT = 0b01;
+//    ADL0CONHbits.WM = 0b00;
+//    ADL0CONHbits.CM = 0b000;
+//    ADL0CONHbits.CTMEN = 0;
+//    ADL0CONHbits.MULCHEN = 0;
+//    ADL0CONHbits.SAMC = 0b01000;
+//    
+//    ADL0CONLbits.SLEN = 0;
+//    ADL0CONLbits.SAMP = 0;
+//    ADL0CONLbits.SLENCLR = 0;
+//    ADL0CONLbits.SLTSRC = 0b00110;
+//    ADL0CONLbits.THSRC = 1;
+//    ADL0CONLbits.SLSIZE = 0b11111;
+//    
+//    ADTBL1 = 15;
+//    ADTBL1bits.UCTMU = 1;
+//    
+//    IFS0bits.AD1IF = 0;
+//    ADSTATLbits.SL0IF = 0;
+//    ADL0CONLbits.SLEN = 1;
+//    
+//    CTMUCON1bits.CTMUEN = 1;
+//    CTMUCON1bits.CTMUSIDL = 0;
+//    CTMUCON1bits.EDGEN = 1;
+//    CTMUCON1bits.EDGSEQEN = 0;
+//    CTMUCON1bits.CTTRIG = 1;
+//    
+//    CTMUCON2bits.EDG1STAT = 1;
+//    CTMUCON2bits.EDG1MOD = 1;
+//    CTMUCON2bits.EDG1POL = 1;
+//    CTMUCON2bits.EDG1SEL = 0b0111;
+//    CTMUCON2bits.EDG2STAT = 1;
+//    CTMUCON2bits.EDG2MOD = 1;
+//    CTMUCON2bits.EDG2POL = 1;
+//    CTMUCON2bits.EDG2SEL = 0b1100;
+//    
+//    CTMUICONbits.ITRIM = 0b000000;
+//    CTMUICONbits.IRNG = 0b10;
+    
+    
+//    ADL0CONLbits.SAMP = 1; 
+//    CTMUCON1bits.IDISSEN = 1;
+//    wait(1000);
+//    CTMUCON1bits.IDISSEN = 0;
+//    Nop();Nop();Nop();Nop();Nop();Nop();Nop();Nop();Nop();Nop();
+////    while(IFS0bits.AD1IF == 0);
+//    CTMUCON2bits.EDG1STAT = 0;
+//    uint16_t chanel_1 = ADRES1;
+    
      
 #ifdef SSD1306
     ssdInit();
@@ -381,27 +576,211 @@ int main(void)
     
     //for(i = 0; i < 20000; i++);
     
-    sh1106_PrintLogo(delfidia);
+    sh1106_PrintLogo();
     for(i = 0; i < 400000; i++);
-    sh1106_Clear();
     
-    sh1106_PrintAll();
+    
+    for(i = 0; i < 20000; i++);
+    sh1106_Clear();
     
 #endif
     
 #ifdef ST7789
 //    IO_LED_SetHigh();
-    st7789_Init();
-    drawHLine(0,100, 10, ST7789_BLUE);
-#endif
+//    IO_RES_SetHigh();
+    wait(1200);
+//    spiInit();
+    wait(200);
+    while(1){
     
+        wait(300);
+        uint8_t i;
+//        spiTransmitOne(0xAA); 
+        break;
+    }
+       
+//    st7789_Init();
+//    drawHLine(0,100, 10, ST7789_BLUE);
+    
+#endif
+//    UART1_Write(0xDF);
+//    uint8_t u;
+//    uint16_t sum = 0;
+//    for(u = 0; u < 10; u++){
+//        counterCalibrate = 0;
+//    IO_TControl_SetLow();
+//    while(IO_TBut_GetValue() !=0);
+//    IO_TControl_SetHigh();
+//    while(IO_TBut_GetValue() == 0) counterCalibrate++;
+//    sum = sum + counterCalibrate;
+//    
+//    }
+//    
+//    printNumber(sum/10);
+//    counter = 0;
+//    wait(20000);
+//    wait(20000);
+//    wait(20000);
+//    wait(20000);
+//    for(i = 0; i < 100000; i++);
+//    uint8_t j = 0;
+//    uint32_t summ = 0;
+    
+    
+    //sh1106_PrintDigit(9, 10, 0);
+    //sh1106_PrintStrip(50,1);
+    
+    
+//    sh1106_printTime(13,8);
+//    sh1106_PrintDate(21,9, 2020);
+    
+   sh1106_PrintTempDataTime();
+   uint8_t flag = 0;
     while (1)
     {
+        
+        
+        
+        if(isButtonPressed()){
+            //sh1106_Clear();
+            flag++;
+            if(flag > 7) flag = 0;
+        }
+        if(flag == 0){
+            sh1106_PrintStrip(50,1);
+            wait(30000);wait(30000);wait(30000);
+            sh1106_PrintStripWithoutBlood(50,1);
+            wait(30000);wait(30000);wait(30000);
+        } else if( flag == 1){
+            sh1106_Clear();
+            sh1106_PrintDigit(5, 62, 3);
+            wait(200000);
+            sh1106_PrintDigit(4, 62, 3);
+            wait(200000);
+            sh1106_PrintDigit(3, 62, 3);
+            wait(200000);
+            sh1106_PrintDigit(2, 62, 3);
+            wait(200000);
+            sh1106_PrintDigit(1, 62, 3);
+            wait(200000);
+            sh1106_PrintDigit(0, 62, 3);
+            wait(200000);
+            sh1106_PrintExampleFrame();
+            flag = 2;
+        } else if( flag == 2){
+            sh1106_PrintExampleFrame();
+        } else if( flag == 3){
+            sh1106_PrintBefore(100, 2);
+        } else if( flag == 4){
+            sh1106_PrintAfter(100, 2);
+        }
+        else if( flag == 5){
+            sh1106_PrintErr11();
+        }
+        else if( flag == 6){
+            sh1106_PrintMainResult();
+        }else if( flag == 7){
+            sh1106_PrintBigDispaly();
+        }
+        
+        
+//        sh1106_PrintBefore(60,3);
+//        wait(30000);wait(30000);wait(30000);
+//        sh1106_PrintAfter(60,3);
+//        wait(30000);wait(30000);wait(30000);
+        
+//        for(i = 0; i < 10; i++){
+//        sh1106_PrintStripH(15,3);
+//        wait(30000);wait(30000);wait(30000);
+//        sh1106_PrintStripHWithoutBlood(15,3);
+//        wait(30000);wait(30000);wait(30000);
+//        }
+//        sh1106_Clear();
+//        for(i = 0; i < 10; i++){
+//        sh1106_PrintStrip(50,2);
+//        wait(30000);wait(30000);wait(30000);
+//        sh1106_PrintStripWithoutBlood(50,1);
+//        wait(30000);wait(30000);wait(30000);
+//        }
+//        sh1106_Clear();
+        
+//        IO_TControl_SetLow();
+//        while(IO_TBut_GetValue() !=0);
+//        IO_TControl_SetHigh();
+//        while(IO_TBut_GetValue() == 0) counter++;
+        
+        
+        
+//        IO_TControl_SetLow();
+        
+//        IO_TControl_SetHigh();
+//        wait(50);
+//        //while(IO_TBut_GetValue() !=0);
+//        IO_TControl_SetLow();
+//        Nop(); Nop(); Nop(); Nop();
+//        ADC_getDataFromChanel();
+//        wait(50);
 //        for(i = 0; i < 20000; i++);
 //        ADC_getDataFromChanel();
-//        printNumber(chanel_23);
-        IO_LED_Toggle();
-        wait(20000);
+//        printNumber((int)sensorRead());
+//        if(counter > counterCalibrate+3)
+//            IO_LED_SetHigh();
+//        else
+//            IO_LED_SetLow();
+            
+//        wait(20000);
+//        uint8_t data = (uint8_t)sensorRead();
+//        UART1_Write((int)sensorRead());
+//        sample = CtmuReturnSample();
+//        printNumber(1250);
+        // step 14-15 subtract the threshold and test
+//        if (sample < untouched - CTMU_TOUCH_THRESHHOLD_OFFSET){
+//            // button was pressed
+//            sh1106_PrintAll();
+//            wait(20000);
+//            sh1106_Clear();
+//        } 
+//        LED_B15 = !LED_B15;
+        // user code
+        
+//    CTMUCON2bits.EDG1STAT = 1;
+//    
+//    ADL0CONLbits.SAMP = 1; 
+//    CTMUCON1bits.IDISSEN = 1;
+//    wait(1);
+//    CTMUCON1bits.IDISSEN = 0;
+//    Nop();Nop();Nop();Nop();Nop();Nop();Nop();Nop();Nop();Nop();
+////    while(IFS0bits.AD1IF == 0);
+//    CTMUCON2bits.EDG1STAT = 0;
+//    IFS0bits.AD1IF = 0;                //Clear flag of interrupt
+//    ADL0CONLbits.SAMP = 0;             //Stop conversion 
+//    //while(IFS0bits.AD1IF == 0);        //Checking flag of interrupt (if it "1" -> start conversion)
+//    ADL0CONLbits.SAMP = 1;             //Begin conversion
+//    chanel_1 = ADRES1;
+    
+//    ADC_getDataFromChanel();
+        
+        
+        
+//        if(j > 10){
+//            j = 0;
+//            printNumber(summ/10);
+//            if(summ/10 > counterCalibrate+3)
+//                IO_GLed_SetHigh();
+//            else
+//                IO_GLed_SetLow();
+//            summ = 0;
+//        }else{
+//            j++;
+//            summ = summ + counter;
+//        }
+        
+        
+        
+        //printNumber(counter);
+        
+//    counter = 0;
+    
     }
 
     return 1;

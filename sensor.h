@@ -76,12 +76,6 @@ extern "C" {
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
-
-//#define SH1106
-//#define SSD1306
-#define ST7789
-
-void printNumber (uint16_t digit);
-void wait1(uint32_t time);
-int isButtonPressed();
+void sensorInit(void);
+float sensorRead(void);
 

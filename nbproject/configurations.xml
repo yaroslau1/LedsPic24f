@@ -11,11 +11,27 @@
         <itemPath>mcc_generated_files/pin_manager.h</itemPath>
         <itemPath>mcc_generated_files/clock.h</itemPath>
         <itemPath>mcc_generated_files/traps.h</itemPath>
-        <itemPath>mcc_generated_files/i2c2.h</itemPath>
         <itemPath>mcc_generated_files/mcc.h</itemPath>
         <itemPath>mcc_generated_files/system.h</itemPath>
-        <itemPath>mcc_generated_files/spi1.h</itemPath>
+        <itemPath>mcc_generated_files/oc1.h</itemPath>
+        <itemPath>mcc_generated_files/oc2.h</itemPath>
       </logicalFolder>
+      <itemPath>flash.h</itemPath>
+      <itemPath>spi.h</itemPath>
+      <itemPath>sound.h</itemPath>
+      <itemPath>adc.h</itemPath>
+      <itemPath>fonts.h</itemPath>
+      <itemPath>i2c.h</itemPath>
+      <itemPath>sh1106.h</itemPath>
+      <itemPath>ssd_1306.h</itemPath>
+      <itemPath>st7789.h</itemPath>
+      <itemPath>work.h</itemPath>
+      <itemPath>sensor.h</itemPath>
+      <itemPath>capacitanceTouch.h</itemPath>
+      <itemPath>dac.h</itemPath>
+      <itemPath>delays_and_timers.h</itemPath>
+      <itemPath>uart.h</itemPath>
+      <itemPath>global.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -31,26 +47,28 @@
         <itemPath>mcc_generated_files/clock.c</itemPath>
         <itemPath>mcc_generated_files/traps.c</itemPath>
         <itemPath>mcc_generated_files/interrupt_manager.c</itemPath>
-        <itemPath>mcc_generated_files/i2c2.c</itemPath>
         <itemPath>mcc_generated_files/mcc.c</itemPath>
         <itemPath>mcc_generated_files/pin_manager.c</itemPath>
-        <itemPath>mcc_generated_files/spi1.c</itemPath>
+        <itemPath>mcc_generated_files/oc1.c</itemPath>
+        <itemPath>mcc_generated_files/oc2.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>work.c</itemPath>
-      <itemPath>work.h</itemPath>
       <itemPath>i2c.c</itemPath>
-      <itemPath>i2c.h</itemPath>
       <itemPath>ssd_1306.c</itemPath>
-      <itemPath>ssd_1306.h</itemPath>
       <itemPath>adc.c</itemPath>
-      <itemPath>adc.h</itemPath>
       <itemPath>sh1106.c</itemPath>
-      <itemPath>spi.c</itemPath>
-      <itemPath>spi.h</itemPath>
       <itemPath>st7789.c</itemPath>
-      <itemPath>st7789.h</itemPath>
-      <itemPath>sh1106.h</itemPath>
+      <itemPath>sensor.c</itemPath>
+      <itemPath>capacitanceTouch.c</itemPath>
+      <itemPath>fonts.c</itemPath>
+      <itemPath>dac.c</itemPath>
+      <itemPath>delays_and_timers.c</itemPath>
+      <itemPath>uart.c</itemPath>
+      <itemPath>global.c</itemPath>
+      <itemPath>flash.c</itemPath>
+      <itemPath>spi.c</itemPath>
+      <itemPath>sound.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -61,6 +79,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>.</Elem>
+    <Elem>../TestProject.X</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
